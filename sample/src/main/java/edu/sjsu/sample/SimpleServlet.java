@@ -32,10 +32,10 @@ public class SimpleServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String consumerKeyStr = "Y6oETI68468kyFTJrtIr72KJN";
-		String consumerSecretStr = "m7cDS8snMfr2erJPEGh21pZjngEBKYnw2Km6AGQGFUmhdxaAcJ";
-		String accessTokenStr = "910234730183794688-qDk13KxpS8bnDzVbh7vCEZ07YNBF6Gj";
-		String accessTokenSecretStr = "tQxgqvuqIY30PZWAPuDHZELgEZH9IJDr6POj9T6EQ8NOa";
+		String consumerKeyStr = "";
+		String consumerSecretStr = "";
+		String accessTokenStr = "";
+		String accessTokenSecretStr = "";
 
 		try {
 			OAuthConsumer oAuthConsumer = new CommonsHttpOAuthConsumer(consumerKeyStr, consumerSecretStr);
