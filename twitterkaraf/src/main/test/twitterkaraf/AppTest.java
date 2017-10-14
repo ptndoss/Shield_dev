@@ -63,7 +63,7 @@ public class AppTest {
 	
 	@Test
 	public void testStatusUpdate() {
-		List<String> response = twitterHelper.statusUpdate("Napa Fires are terrible!! :(");
+		List<String> response = twitterHelper.statusUpdate("Test");
 		Assert.assertNotNull(response);
 	}
 	
