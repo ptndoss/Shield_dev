@@ -33,8 +33,17 @@ public class TwitterServlet extends HttpServlet {
 			case "searchHashTag":
 				twitterHelper.searchHashTag(request, response);
 				break;
+			case "homeTimeline":
+				twitterHelper.homeTimeline(request, response);
+				break;
 			case "languageSupport":
 				twitterHelper.languageSupport(request, response);
+				break;
+			case "trendsClosest":
+				twitterHelper.trendsClosest(request, response);
+				break;
+			case "followerList":
+				twitterHelper.followersList(request, response);
 				break;
 
 			default:
