@@ -18,7 +18,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import edu.sjsu.twitterkaraf.data.TwitterResponseData;
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.exception.OAuthCommunicationException;
@@ -47,39 +46,6 @@ public class TwitterHelper {
 		return oAuthConsumer;
 	}
 
-	public void searchHashTag(HttpServletRequest request, HttpServletResponse response) {
-		try {
-			Properties properties = getProperties();
-			String apiUrl = properties.getProperty("twitter.api.search.tweets");
-			String searchHashTag = request.getParameter("parameter");
-			apiUrl = apiUrl + "?count=10&q=%23" + searchHashTag;
-			HttpResponse apiResponse = executeHttpGet(apiUrl);
-			if (200 == apiResponse.getStatusLine().getStatusCode()) {
-				List<TwitterResponseData> twitterResponseList = new ArrayList<TwitterResponseData>();
-				JSONObject jsonobject = new JSONObject(EntityUtils.toString(apiResponse.getEntity()));
-				JSONArray jsonArray = (JSONArray) jsonobject.get("statuses");
-				for (int i = 0; i < jsonArray.length(); i++) {
-					JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-					JSONObject userObject = (JSONObject) jsonObject.get("user");
-					TwitterResponseData twitterResponseData = new TwitterResponseData();
-					twitterResponseData.setId((String) userObject.get("screen_name"));
-					twitterResponseData.setText((String) jsonObject.get("text"));
-					twitterResponseList.add(twitterResponseData);
-				}
-
-				request.getSession().setAttribute("twitterResponse", twitterResponseList);
-				request.getSession().setAttribute("header1", "Screen Name");
-				request.getSession().setAttribute("header2", "Tweet Text");
-				request.getSession().setAttribute("option", "Search Tweet");
-				
-				
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
 	private HttpResponse executeHttpPost(String apiUrl) throws OAuthMessageSignerException,
 			OAuthExpectationFailedException, OAuthCommunicationException, IOException {
 		HttpPost httprequest = new HttpPost(apiUrl);
@@ -100,5 +66,130 @@ public class TwitterHelper {
 		int statusCode = httpresponse.getStatusLine().getStatusCode();
 		System.out.println(statusCode + ":" + httpresponse.getStatusLine().getReasonPhrase());
 		return httpresponse;
+	}
+
+	public void searchHashTag(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			Properties properties = getProperties();
+			String apiUrl = properties.getProperty("twitter.api.search.tweets");
+
+			String searchHashTag = request.getParameter("searchStr");
+			apiUrl = apiUrl + "?count=10&q=%23" + searchHashTag;
+
+			HttpResponse apiResponse = executeHttpGet(apiUrl);
+
+			if (200 == apiResponse.getStatusLine().getStatusCode()) {
+
+				List<String> twitterResponseList = new ArrayList<String>();
+
+				JSONObject jsonobject = new JSONObject(EntityUtils.toString(apiResponse.getEntity()));
+				JSONArray jsonArray = (JSONArray) jsonobject.get("statuses");
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+					JSONObject userObject = (JSONObject) jsonObject.get("user");
+					String displayText = (String) userObject.get("screen_name") + " : "
+							+ (String) jsonObject.get("text");
+					twitterResponseList.add(displayText);
+				}
+
+				request.getSession().setAttribute("twitterResponse", twitterResponseList);
+				request.getSession().setAttribute("option", "Search Tweet");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void createFriendship(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			Properties properties = getProperties();
+			String apiUrl = properties.getProperty("twitter.api.createfriendship");
+
+			String searchStr = request.getParameter("searchStr");
+			apiUrl = apiUrl + "?screen_name=" + searchStr;
+
+			HttpResponse apiResponse = executeHttpPost(apiUrl);
+
+			if (200 == apiResponse.getStatusLine().getStatusCode()) {
+				request.getSession().setAttribute("twitterResponse", "API call was Successful");
+				request.getSession().setAttribute("option", "Create Friendship");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void statusupdate(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			Properties properties = getProperties();
+			String apiUrl = properties.getProperty("twitter.api.status.update");
+
+			String searchStr = request.getParameter("searchStr");
+			apiUrl = apiUrl + "?status=" + searchStr;
+
+			HttpResponse apiResponse = executeHttpPost(apiUrl);
+
+			if (200 == apiResponse.getStatusLine().getStatusCode()) {
+				request.getSession().setAttribute("twitterResponse", "API call was Successful");
+				request.getSession().setAttribute("option", "Create Friendship");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void trendsavailable(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			Properties properties = getProperties();
+			String apiUrl = properties.getProperty("twitter.api.trends.available");
+
+			HttpResponse apiResponse = executeHttpGet(apiUrl);
+
+			if (200 == apiResponse.getStatusLine().getStatusCode()) {
+
+				List<String> twitterResponseList = new ArrayList<String>();
+				JSONArray jsonArray = new JSONArray(EntityUtils.toString(apiResponse.getEntity()));
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject object = (JSONObject) jsonArray.get(0);
+					String displayText = (String) object.get("country") + " : " + (String) object.get("url");
+					twitterResponseList.add(displayText);
+				}
+
+				request.getSession().setAttribute("twitterResponse", twitterResponseList);
+				request.getSession().setAttribute("option", "Trends Available");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void languageSupport(HttpServletRequest request, HttpServletResponse response) {
+		try {
+			Properties properties = getProperties();
+			String apiUrl = properties.getProperty("twitter.api.language.support");
+
+			HttpResponse apiResponse = executeHttpGet(apiUrl);
+
+			if (200 == apiResponse.getStatusLine().getStatusCode()) {
+
+				List<String> twitterResponseList = new ArrayList<String>();
+				JSONArray jsonArray = new JSONArray(EntityUtils.toString(apiResponse.getEntity()));
+				for (int i = 0; i < jsonArray.length(); i++) {
+					JSONObject object = (JSONObject) jsonArray.get(0);
+					String displayText = (String) object.get("name");
+					twitterResponseList.add(displayText);
+				}
+
+				request.getSession().setAttribute("twitterResponse", twitterResponseList);
+				request.getSession().setAttribute("option", "Trends Available");
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
