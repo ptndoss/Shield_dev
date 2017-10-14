@@ -2,6 +2,7 @@
     <wb-module deploy-name="twitterkaraf">
         <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/test"/>
         <property name="context-root" value="twitterkaraf"/>
         <property name="java-output-path" value="/twitterkaraf/target/classes"/>
     </wb-module>
