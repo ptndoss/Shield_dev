@@ -85,10 +85,15 @@
 			<artifactId>junit</artifactId>
 			<version>4.12</version>
 		</dependency>
-	</dependencies>
-	<build>
-		<finalName>twitterkaraf</finalName>
-		<plugins>
+		<dependency>
+  <groupId>javax.servlet</groupId>
+  <artifactId>jstl</artifactId>
+  <version>1.2</version>
+</dependency>
+</dependencies>
+  <build>
+    <finalName>twitterkaraf</finalName>
+    <plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

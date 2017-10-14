@@ -30,43 +30,42 @@ public class TwitterServlet extends HttpServlet {
 
 		try {
 			TwitterHelper twitterHelper = new TwitterHelper();
-
+			
 			String twitteroptions = request.getParameter("twitteroptions");
 			String searchStr = request.getParameter("searchStr");
 			List<String> twitterResponseList = new ArrayList<String>();
 
 			switch (twitteroptions) {
-			case "createfriendship":
+			case "Create Friendship":
 				twitterResponseList = twitterHelper.createFriendship(searchStr);
 				break;
-			case "statusupdate":
+			case "Status Update":
 				twitterResponseList = twitterHelper.statusUpdate(searchStr);
 				break;
-			case "trendsavailable":
+			case "Trends Available":
 				twitterResponseList = twitterHelper.trendsAvailable();
 				break;
-			case "searchHashTag":
+			case "Search HashTag":
 				twitterResponseList = twitterHelper.searchHashTag(searchStr);
 				break;
-			case "homeTimeline":
+			case "Home Timeline":
 				twitterResponseList = twitterHelper.homeTimeline();
 				break;
-			case "languageSupport":
+			case "Language Support":
 				twitterResponseList = twitterHelper.languageSupport();
 				break;
-			case "trendsClosest":
+			case "Trends Closest":
 				twitterResponseList = twitterHelper.trendsClosest();
 				break;
-			case "followerList":
+			case "Followers List":
 				twitterResponseList = twitterHelper.followersList(searchStr);
 				break;
 
 			default:
 				break;
-
-			}
+		}
 			request.getSession().setAttribute("twitterResponse", twitterResponseList);
-			request.getSession().setAttribute("option", "twitteroptions");
+			request.getSession().setAttribute("option", twitteroptions);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
