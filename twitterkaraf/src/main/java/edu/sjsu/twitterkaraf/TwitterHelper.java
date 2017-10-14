@@ -259,7 +259,8 @@ public class TwitterHelper {
 			if (200 == apiResponse.getStatusLine().getStatusCode()) {
 
 				List<String> twitterResponseList = new ArrayList<String>();
-				JSONArray jsonArray = new JSONArray(EntityUtils.toString(apiResponse.getEntity()));
+				JSONObject jsonobject = new JSONObject(EntityUtils.toString(apiResponse.getEntity()));
+				JSONArray jsonArray = (JSONArray) jsonobject.get("users");
 				for (int i = 0; i < jsonArray.length() || i == 10; i++) {
 					JSONObject object = (JSONObject) jsonArray.get(i);
 					String displayText = (String) object.get("name") + " : " + (String) object.get("screen_name");
