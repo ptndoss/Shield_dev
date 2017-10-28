@@ -24,7 +24,7 @@ import oauth.signpost.exception.OAuthMessageSignerException;
 /**
  * Helper Class to invoke all Twitter APIs Uses signpost to make http calls.
  * 
- * @author Anushri Srinath Aithal Nidhi Jamar Aswhwini Shankar Narayan Anuradha
+ * @author Anushri Srinath Aithal Nidhi Jamar Ashwini Shankar Narayan Anuradha
  *         Rajashekar
  *
  */
@@ -223,7 +223,12 @@ public class TwitterHelper {
 		}
 		return twitterResponseList;
 	}
-
+	/**
+	 * Implementing twitter API to display all languages that twitter supports
+	 * 
+	 * @return List of languages supported by Twitter
+	 * @author Ashwini Shankar Narayan
+	 */
 	public List<String> languageSupport() {
 		List<String> twitterResponseList = new ArrayList<String>();
 		try {

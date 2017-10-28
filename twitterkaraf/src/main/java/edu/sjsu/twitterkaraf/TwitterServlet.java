@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementing Twitter APIs to be deployed on karaf
  * @author Anushri Srinath Aithal
  * Nidhi Jamar
- * Aswhwini Shankar Narayan
+ * Ashwini Shankar Narayan
  * Anuradha Rajashekar
  *
  */

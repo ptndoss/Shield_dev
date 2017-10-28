@@ -1,4 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ page import="java.util.List"%>
 <!DOCTYPE html>
@@ -23,9 +24,9 @@ hr {
 }
 </style>
 </head>
-<body style="margin:0px 0px 0px 20px;">
-<h2>Shield Twitter Box</h2>
-<br>
+<body style="margin: 0px 0px 0px 20px;">
+	<h2>Shield Twitter Box</h2>
+	<br>
 	<form action="executeApi" method="POST">
 		<input type="text" name="searchStr" value=""> <select
 			name="twitteroptions">
