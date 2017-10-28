@@ -22,19 +22,19 @@ import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
 
 /**
- * Helper Class to invoke all Twitter APIs
- * Uses signpost to make http calls.
- * @author Anushri Srinath Aithal
- * Nidhi Jamar
- * Aswhwini Shankar Narayan
- * Anuradha Rajashekar
+ * Helper Class to invoke all Twitter APIs Uses signpost to make http calls.
+ * 
+ * @author Anushri Srinath Aithal Nidhi Jamar Aswhwini Shankar Narayan Anuradha
+ *         Rajashekar
  *
  */
 @SuppressWarnings({ "deprecation", "resource" })
 public class TwitterHelper {
-	
+
 	/**
-	 * Method to load the properties file while twitter tokens and api URLs are placed
+	 * Method to load the properties file while twitter tokens and api URLs are
+	 * placed
+	 * 
 	 * @return Property File
 	 * @throws IOException
 	 * @author Anushri Srinath Aithal
@@ -48,6 +48,7 @@ public class TwitterHelper {
 
 	/**
 	 * Create signpot OAuthConsumer to invoke Twitter APIs with right access tokens
+	 * 
 	 * @return OAuthConsumer
 	 * @throws IOException
 	 * @author Anushri Srinath Aithal
@@ -65,6 +66,7 @@ public class TwitterHelper {
 
 	/**
 	 * Execute Http Post calls to invoke the post APIs
+	 * 
 	 * @param apiUrl
 	 * @return
 	 * @throws OAuthMessageSignerException
@@ -87,6 +89,7 @@ public class TwitterHelper {
 
 	/**
 	 * Execute Http Get calls to invoke the Get APIs
+	 * 
 	 * @param apiUrl
 	 * @return
 	 * @throws OAuthMessageSignerException
@@ -109,6 +112,7 @@ public class TwitterHelper {
 
 	/**
 	 * Implementing Twitter API to search tweets based on Hash Tag
+	 * 
 	 * @param searchHashTag
 	 * @return List of tweets, max of 10 records
 	 * @author Anushri Srinath Aithal
@@ -123,14 +127,16 @@ public class TwitterHelper {
 			HttpResponse apiResponse = executeHttpGet(apiUrl);
 
 			if (200 == apiResponse.getStatusLine().getStatusCode()) {
-				JSONObject jsonobject = new JSONObject(EntityUtils.toString(apiResponse.getEntity())); //read json response
+				JSONObject jsonobject = new JSONObject(EntityUtils.toString(apiResponse.getEntity())); // read json
+																										// response
 				JSONArray jsonArray = (JSONArray) jsonobject.get("statuses");
 				for (int i = 0; i < jsonArray.length(); i++) {
 					JSONObject jsonObject = (JSONObject) jsonArray.get(i);
 					JSONObject userObject = (JSONObject) jsonObject.get("user");
-					
-					String displayText = (String) userObject.get("screen_name") + " : " + (String) jsonObject.get("text");
-					twitterResponseList.add(displayText); //add tweet user name : tweet text
+
+					String displayText = (String) userObject.get("screen_name") + " : "
+							+ (String) jsonObject.get("text");
+					twitterResponseList.add(displayText); // add tweet user name : tweet text
 				}
 			}
 		} catch (Exception e) {
@@ -139,37 +145,56 @@ public class TwitterHelper {
 		return twitterResponseList;
 	}
 
-	public List<String> createFriendship(String searchStr) {
+	/**
+	 * Implementing Twitter API to allow the authenticated user to follow the
+	 * specified user.
+	 * 
+	 * @param screen_name
+	 * @return Message stating the status of the request.
+	 * @author Nidhi Jamar
+	 */
+	public List<String> createFriendship(String screen_name) {
 		List<String> twitterResponseList = new ArrayList<String>();
 		try {
 			Properties properties = getProperties();
 			String apiUrl = properties.getProperty("twitter.api.createfriendship");
-			apiUrl = apiUrl + "?screen_name=" + searchStr;
+			apiUrl = apiUrl + "?screen_name=" + screen_name; //Appending API url with the user's screen name
 
 			HttpResponse apiResponse = executeHttpPost(apiUrl);
 
 			if (200 == apiResponse.getStatusLine().getStatusCode()) {
-				twitterResponseList.add("API call was Successful");
+				twitterResponseList.add("API call was Successful. Following User: "+ screen_name);
+			} else {
+				twitterResponseList.add("API call was Unsuccessful");
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return twitterResponseList;
 	}
 
-	public List<String> statusUpdate(String searchStr) {
+	/**
+	 * Implementing Twitter API to tweet/update status on authenticated user's
+	 * timeline.
+	 * 
+	 * @param status
+	 * @return Message stating the status of the request.
+	 * @author Nidhi Jamar
+	 */
+	public List<String> statusUpdate(String status) {
 		List<String> twitterResponseList = new ArrayList<String>();
 		try {
 			Properties properties = getProperties();
 			String apiUrl = properties.getProperty("twitter.api.status.update");
-			apiUrl = apiUrl + "?status=" + searchStr;
+			apiUrl = apiUrl + "?status=" + status.replace(" ", "%20"); //Appending the API url with the messgae to be tweeted.
 
 			HttpResponse apiResponse = executeHttpPost(apiUrl);
-
 			if (200 == apiResponse.getStatusLine().getStatusCode()) {
-				twitterResponseList.add("API call was Successful");
+				twitterResponseList.add("API call was Successful. Tweeted: "+ status );
+			} else {
+				twitterResponseList.add("API call was Unsuccessful");
 			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -186,8 +211,8 @@ public class TwitterHelper {
 
 			if (200 == apiResponse.getStatusLine().getStatusCode()) {
 				JSONArray jsonArray = new JSONArray(EntityUtils.toString(apiResponse.getEntity()));
-				for (int i = 0; i < jsonArray.length() && i < 10; i++) {
-					JSONObject object = (JSONObject) jsonArray.get(0);
+				for (int i = 1; i < jsonArray.length() && i <= 10; i++) {
+					JSONObject object = (JSONObject) jsonArray.get(i);
 					String displayText = (String) object.get("country") + " : " + (String) object.get("url");
 					twitterResponseList.add(displayText);
 				}
@@ -224,6 +249,7 @@ public class TwitterHelper {
 
 	/**
 	 * Implementing twitter API to display tweets on home timeline
+	 * 
 	 * @return List of Tweets
 	 * @author Anushri Srinath Aithal
 	 */
@@ -231,7 +257,8 @@ public class TwitterHelper {
 		List<String> twitterResponseList = new ArrayList<String>();
 		try {
 			Properties properties = getProperties();
-			String apiUrl = properties.getProperty("twitter.api.home.timeline") + "?count=10"; //append count to max of 10
+			String apiUrl = properties.getProperty("twitter.api.home.timeline") + "?count=10"; // append count to max of
+																								// 10
 
 			HttpResponse apiResponse = executeHttpGet(apiUrl);
 
@@ -240,8 +267,9 @@ public class TwitterHelper {
 				for (int i = 0; i < jsonArray.length(); i++) {
 					JSONObject jsonObject = (JSONObject) jsonArray.get(i);
 					JSONObject userObject = (JSONObject) jsonObject.get("user");
-					String displayText = (String) userObject.get("screen_name") + " : " + (String) jsonObject.get("text"); //data to be displayed in screen_name : tweet format
-					twitterResponseList.add(displayText); //list of data in the format mentioned above
+					String displayText = (String) userObject.get("screen_name") + " : "
+							+ (String) jsonObject.get("text"); // data to be displayed in screen_name : tweet format
+					twitterResponseList.add(displayText); // list of data in the format mentioned above
 				}
 			}
 		} catch (Exception e) {
